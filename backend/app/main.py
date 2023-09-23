@@ -90,3 +90,7 @@ def delete_server(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"server with id {id} not found")
 
     return f"None"
+
+@app.get('/healthcheck', status_code=status.HTTP_200_OK)
+def perform_healthcheck():
+    return {'healthcheck': 'Everything OK!'}
