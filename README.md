@@ -19,7 +19,7 @@ To load some predifined data use:
 python3 load.py
 ```
 
-## How to run
+## How to run backend
 
 Fill in the .env file:
 
@@ -66,11 +66,12 @@ curl --request POST \
 
 WIP
 
-# Docker Compose
+# How to run entire app
+## Docker Compose
 
 WIP
 
-# Helm
+## Helm
 
 WIP
 
