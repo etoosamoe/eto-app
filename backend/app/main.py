@@ -1,5 +1,6 @@
 from typing import List
 
+import os
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -42,7 +43,7 @@ def list_servers(db: Session = Depends(get_db)):
     return servers
 
 @app.post("/servers", status_code=status.HTTP_201_CREATED, response_model=schemas.Server)
-def create_server(server: schemas.Server, db: Session = Depends(get_db)):
+def create_server(server: schemas.ServerCreate, db: Session = Depends(get_db)):
     new_server = models.Server(
         hostname = server.hostname,
         type = server.type,
@@ -87,10 +88,14 @@ def delete_server(id: int, db: Session = Depends(get_db)):
         db.delete(server)
         db.commit()
     else:
-        raise HTTPException(status_code=404, detail=f"server with id {id} not found")
+        raise HTTPException(status_code=404, detail=f"Server with id {id} not found")
 
     return f"None"
 
 @app.get('/healthcheck', status_code=status.HTTP_200_OK)
 def perform_healthcheck():
     return {'healthcheck': 'Everything OK!'}
+
+@app.get('/version', status_code=status.HTTP_200_OK)
+def get_version():
+    return {'version': os.getenv("BACK_VERSION")}
