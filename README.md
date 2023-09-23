@@ -8,9 +8,12 @@ Base API CRUD Python application, working with fastapi, sqlalchemy, pydantic.
 
 By default works with SQLite file-based database stored in the container — it will be cleaned after restart.
 
+You can set your own database connection in `backend/.env` file
+
 You can find swagger at `/docs`.
 
 ### Load example data
+
 To load some predifined data use:
 ```
 python3 load.py
@@ -26,6 +29,7 @@ nano .env
 ```
 
 ### Local
+
 ```
 cd backend
 python3 -m pip install -r requirements.py
@@ -33,16 +37,14 @@ uvicorn app.main:app
 ```
 
 ### Docker
+
 Works as non-root user `worker`
+
 ```
 cd backend
 docker build -t eto-backend:latest .
 docker run --env-file .env -p 8000:8000 eto-backend:latest
 ```
-
-### Docker Compose
-
-WIP
 
 ### Example of usage
 
@@ -59,3 +61,21 @@ curl --request POST \
   "disk": 1100
 }'
 ```
+
+# Frontend
+
+WIP
+
+# Docker Compose
+
+WIP
+
+# Helm
+
+WIP
+
+# Monitoring
+
+Prometheus-like metrics endpoint:
+
+WIP
