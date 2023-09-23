@@ -77,6 +77,8 @@ WIP
 
 # Monitoring
 
+Backend has `/healthcheck` endpoint which returns status-code `200`.
+
 Prometheus-like metrics endpoint:
 
 WIP
