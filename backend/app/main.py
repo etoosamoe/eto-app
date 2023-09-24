@@ -98,4 +98,4 @@ def perform_healthcheck():
 
 @app.get('/version', status_code=status.HTTP_200_OK)
 def get_version():
-    return {'version': os.getenv("BACK_VERSION")}
+    return {'version': os.getenv("BACKEND_VERSION")}
