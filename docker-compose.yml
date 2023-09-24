@@ -10,4 +10,4 @@ services:
     build: frontend/.
     image: etoosamoe/eto-frontend:latest
     ports:
-      - "8080:80"
+      - "80:80"
