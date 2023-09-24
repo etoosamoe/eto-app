@@ -1,0 +1,38 @@
+body {
+  margin-left: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* In your CSS stylesheet */
+table {
+  width: 50%; /* Optionally set a width if needed */
+  border-collapse: collapse; /* Optional: This makes table borders collapse for a cleaner look */
+  padding: 10px; /* Add padding to all tables */
+}
+
+table th,
+table td {
+  padding: 8px; /* Add padding to table header cells and data cells */
+  border: 1px solid #ccc; /* Optional: Add borders for a visual distinction */
+}
+
+/* Optional: Add more specific styling for header cells or specific columns */
+table th {
+  background-color: #f2f2f2; /* Background color for header cells */
+  font-weight: bold; /* Optionally make the text bold in header cells */
+}
+
+/* Optional: Add hover effect to rows */
+table tr:hover {
+  background-color: #e0e0e0;
+}
+
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
