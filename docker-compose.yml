@@ -14,5 +14,3 @@ services:
     image: etoosamoe/eto-frontend:latest
     ports:
       - "80:80"
-    volumes:
-      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
