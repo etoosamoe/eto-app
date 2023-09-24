@@ -1,5 +1,7 @@
 # eto-app
 
+![Images Build](https://github.com/etoosamoe/eto-app/actions/workflows/build.yml/badge.svg)
+
 Example application with backend as API, frontend and database to train some programming and DevOps skills.
 
 ## Backend
