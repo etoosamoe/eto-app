@@ -32,8 +32,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
-          file: ./Dockerfile
+          context: backend
           push: true
           tags: etoosamoe/eto-backend:latest
           labels: ${{ steps.meta.outputs.labels }}
@@ -60,8 +59,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./Dockerfile
+          context: frontend
           push: true
           tags: etoosamoe/eto-frontend:latest
           labels: ${{ steps.meta.outputs.labels }}
