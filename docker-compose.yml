@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  eto-backend:
+    build: backend/.
+    image: etoosamoe/eto-backend:latest
+    ports:
+      - "8000:8000"
+  eto-frontend:
+    build: frontend/.
+    image: etoosamoe/eto-frontend:latest
+    ports:
+      - "5000:5000"
