@@ -3,6 +3,15 @@ import Axios from 'axios';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
+const backendServerUrl = process.env.REACT_APP_BACKEND_URL;
+const frontendVersion = process.env.REACT_APP_FRONT_VERSION;
+if (!backendServerUrl) {
+  console.error('REACT_APP_BACKEND_URL environment variable is not set.');
+  process.exit(1);
+}
+
+// Now you can use backendServerUrl in your code
+console.log(`Backend Server URL: ${backendServerUrl}`);
 
 function Table({ frontVersion }) {
   const [data, setData] = useState([]);
@@ -13,20 +22,45 @@ function Table({ frontVersion }) {
   const [disk, setDisk] = useState('');
   const [id, setId] = useState('');
   const [warning, setWarning] = useState('');
+  const [backendVersion, setBackendVersion] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const getBackendVersion = () => {
+    Axios.get(`${backendServerUrl}/version`)
+      .then((response) => {
+        setBackendVersion(response.data.version);
+      })
+  };
+
   const fetchServersData = () => {
-    Axios.get('http://127.0.0.1:8000/servers')
+    Axios.get(`${backendServerUrl}/servers`)
       .then((response) => {
         setData(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        if (error.response) {
+          const responseString = JSON.stringify(error.response.data)
+            setWarning(
+              <div>
+                Error: {error.response.status}<br />
+                {error.response.statusText}<br />
+                {responseString}
+              </div>
+            );
+        } else if (error.request) {
+          // The request was made, but there was no response (e.g., network error)
+          setWarning('Network error. Please try again later.');
+        } else {
+          // Something else happened while setting up the request
+          setWarning('An error occurred. Please try again.');
+        }
+        setIsModalOpen(true);
       });
   };
 
   useEffect(() => {
     fetchServersData();
+    getBackendVersion();
   }, []);
 
   const handleAddServer = () => {
@@ -38,7 +72,7 @@ function Table({ frontVersion }) {
       disk,
     };
 
-    Axios.post('http://127.0.0.1:8000/servers', newServer)
+    Axios.post(`${backendServerUrl}/servers`, newServer)
       .then((response) => {
         fetchServersData()
         setWarning('');
@@ -74,7 +108,7 @@ function Table({ frontVersion }) {
     };
 
     // Send a POST request to add the new server
-    Axios.delete(`http://127.0.0.1:8000/servers/${id}`, DeleteServer)
+    Axios.delete(`${backendServerUrl}/servers/${id}`, DeleteServer)
       .then((response) => {
         fetchServersData();
         setWarning('');
@@ -111,7 +145,7 @@ function Table({ frontVersion }) {
       disk,
     };
 
-    Axios.put(`http://127.0.0.1:8000/servers/${id}`, updServer)
+    Axios.put(`${backendServerUrl}/servers/${id}`, updServer)
       .then((response) => {
         fetchServersData();
         setWarning('');
@@ -140,7 +174,7 @@ function Table({ frontVersion }) {
 
   const handleGetSingleData  = (serverId) => {
 
-    Axios.get(`http://127.0.0.1:8000/servers/${serverId}`)
+    Axios.get(`${backendServerUrl}/servers/${serverId}`)
       .then((response) => {
         setId(response.data.id)
         setHostname(response.data.hostname)
@@ -272,7 +306,8 @@ function Table({ frontVersion }) {
     </div>
     <hr />
     <div>
-      <p>Frontend version: {frontVersion}</p>
+      <p>Frontend version: {frontendVersion}</p>
+      <p>Backend version: {backendVersion}</p>
       <p>Made with 💜 by <a href="https://github.com/etoosamoe">Yuriy Semyenkov</a>.</p>
     </div>
     </div>
