@@ -8,7 +8,7 @@ on:
 #      - master
 jobs:
   build-backend:
-    name: Push Docker image to Docker Hub
+    name: Build Backend Image
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -32,13 +32,14 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: backend
+          context: ./backend
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: etoosamoe/eto-backend:latest
           labels: ${{ steps.meta.outputs.labels }}
+
   build-frontend:
-    name: Push Docker image to Docker Hub
+    name: Build Frontend Image
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -59,8 +60,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: frontend
+          context: ./frontend
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: etoosamoe/eto-frontend:latest
           labels: ${{ steps.meta.outputs.labels }}
