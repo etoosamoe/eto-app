@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import Modal from 'react-modal';
 
-// Set the app root element for accessibility
 Modal.setAppElement('#root');
-
-const frontVersion = process.env.FRONT_VERSION;
-
-const initialProps = { frontVersion };
 
 function Table({ frontVersion }) {
   const [data, setData] = useState([]);
@@ -19,8 +14,6 @@ function Table({ frontVersion }) {
   const [id, setId] = useState('');
   const [warning, setWarning] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fullResponse, setFullResponse] = useState('');
-
 
   const fetchServersData = () => {
     Axios.get('http://127.0.0.1:8000/servers')
@@ -37,7 +30,6 @@ function Table({ frontVersion }) {
   }, []);
 
   const handleAddServer = () => {
-    // Create a JSON object with the input values
     const newServer = {
       hostname,
       type,
@@ -46,25 +38,21 @@ function Table({ frontVersion }) {
       disk,
     };
 
-    // Send a POST request to add the new server
     Axios.post('http://127.0.0.1:8000/servers', newServer)
       .then((response) => {
-        // Optionally, you can update the state with the new data from the server
-        setData([...data, response.data]);
+        fetchServersData()
         setWarning('');
-        setFullResponse('adadaad');
       })
       .catch((error) => {
         if (error.response) {
-          // The request was made, but the server responded with a non-2xx status code
           const responseString = JSON.stringify(error.response.data)
-          if (error.response.status === 303) {
-            // Handle 303 status code with a custom message
-            setWarning(`Error: ${error.response.status}\n${error.response.statusText}\n${responseString}`);
-          } else {
-            // Handle other status codes with a generic error message
-            setWarning(`Error: ${error.response.status}\n${error.response.statusText}\n${responseString}`);
-          }
+            setWarning(
+              <div>
+                Error: {error.response.status}<br />
+                {error.response.statusText}<br />
+                {responseString}
+              </div>
+            );
         } else if (error.request) {
           // The request was made, but there was no response (e.g., network error)
           setWarning('Network error. Please try again later.');
@@ -80,10 +68,6 @@ function Table({ frontVersion }) {
     setIsModalOpen(false);
   };
 
-  const viewFullResponse = () => {
-    setIsModalOpen(true);
-  };
-
   const handleDeleteServer = () => {
     const DeleteServer = {
       id
@@ -93,18 +77,19 @@ function Table({ frontVersion }) {
     Axios.delete(`http://127.0.0.1:8000/servers/${id}`, DeleteServer)
       .then((response) => {
         fetchServersData();
+        setWarning('');
       })
       .catch((error) => {
         const responseString = JSON.stringify(error.response.data)
         if (error.response) {
           // The request was made, but the server responded with a non-2xx status code
-          if (error.response.status === 404) {
-            // Handle 404 status code with a custom message
-            setWarning(`Error: ${error.response.status}\n${error.response.statusText}\n${responseString}`);
-          } else {
-            // Handle other status codes with a generic error message
-            setWarning(`Error: ${error.response.status}\n${error.response.statusText}\n${responseString}`);
-          }
+            setWarning(
+              <div>
+                Error: {error.response.status}<br />
+                {error.response.statusText}<br />
+                {responseString}
+              </div>
+            );
         } else if (error.request) {
           // The request was made, but there was no response (e.g., network error)
           setWarning('Network error. Please try again later.');
@@ -116,9 +101,63 @@ function Table({ frontVersion }) {
       });
   };
 
+  const handleUpdateServer = () => {
+    const updServer = {
+      id,
+      hostname,
+      type,
+      cores,
+      ram,
+      disk,
+    };
+
+    Axios.put(`http://127.0.0.1:8000/servers/${id}`, updServer)
+      .then((response) => {
+        fetchServersData();
+        setWarning('');
+      })
+      .catch((error) => {
+        if (error.response) {
+          // The request was made, but the server responded with a non-2xx status code
+          const responseString = JSON.stringify(error.response.data)
+            setWarning(
+              <div>
+                Error: {error.response.status}<br />
+                {error.response.statusText}<br />
+                {responseString}
+              </div>
+            );
+        } else if (error.request) {
+          // The request was made, but there was no response (e.g., network error)
+          setWarning('Network error. Please try again later.');
+        } else {
+          // Something else happened while setting up the request
+          setWarning('An error occurred. Please try again.');
+        }
+        setIsModalOpen(true);
+      });
+  };
+
+  const handleGetSingleData  = (serverId) => {
+
+    Axios.get(`http://127.0.0.1:8000/servers/${serverId}`)
+      .then((response) => {
+        setId(response.data.id)
+        setHostname(response.data.hostname)
+        setType(response.data.type)
+        setCores(response.data.cores)
+        setRam(response.data.ram)
+        setDisk(response.data.disk)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
+
   return (
     <div>
-      <h1>Servers list</h1>
+      <h1>🧑🏻‍💻 eto-app</h1>
+      <h2>🖥️ Servers list</h2>
       <table>
         <thead>
           <tr>
@@ -128,6 +167,7 @@ function Table({ frontVersion }) {
             <th>Cores</th>
             <th>RAM</th>
             <th>Disk</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -139,13 +179,16 @@ function Table({ frontVersion }) {
               <td>{item.cores}</td>
               <td>{item.ram}</td>
               <td>{item.disk}</td>
+              <td>
+                <button onClick={() => handleGetSingleData(item.id)}>Get</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
       <hr />
       <div>
-      <h2>Add new server</h2>
+      <h2>🌿 Add / Update server</h2>
       <input
         type="text"
         placeholder="Hostname"
@@ -192,11 +235,21 @@ function Table({ frontVersion }) {
         <p>{warning}</p>
         <button onClick={closeModal}>Close</button>
       </Modal>
+      <button onClick={handleUpdateServer}>Update Server</button>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Warning Modal"
+      >
+        <h2>Warning</h2>
+        <p>{warning}</p>
+        <button onClick={closeModal}>Close</button>
+      </Modal>
 
       </div>
       <hr />
       <div>
-      <h2>Delete server by ID</h2>
+      <h2>💔 Delete server by ID</h2>
       <input
         type="int"
         placeholder="ID"
@@ -220,6 +273,7 @@ function Table({ frontVersion }) {
     <hr />
     <div>
       <p>Frontend version: {frontVersion}</p>
+      <p>Made with 💜 by <a href="https://github.com/etoosamoe">Yuriy Semyenkov</a>.</p>
     </div>
     </div>
   );
