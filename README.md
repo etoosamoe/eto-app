@@ -84,7 +84,7 @@ Frontend works with NodeJS and uses React. It makes requests to backend API to g
 ```
 cd frontend
 npm install
-npm start
+REACT_APP_BACKEND_URL=http://127.0.0.1:8000 npm start
 ```
 Then go to http://127.0.0.1:3000.
 
