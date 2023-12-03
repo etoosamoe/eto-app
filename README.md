@@ -132,3 +132,7 @@ Backend has `/healthcheck` endpoint which returns status-code `200`.
 Prometheus-like metrics endpoint:
 
 WIP
+
+# Endpoints
+
+`/flaky` — this API enpoint will raise an 500 error sometimes. Default probability is 0.1 which means 10% of all requests. It can be modified by `FLAKY_ERROR_PROBABILITY` env. variable.
