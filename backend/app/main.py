@@ -1,6 +1,7 @@
 from typing import List
 
 import os
+import random
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -99,3 +100,15 @@ def perform_healthcheck():
 @app.get('/version', status_code=status.HTTP_200_OK)
 def get_version():
     return {'version': os.getenv("BACKEND_VERSION")}
+
+@app.get("/flaky", description="Flaky endpoint will generate an error sometimes. Configure via FLAKY_ERROR_PROBABILITY variable.")
+def flaky_endpoint():
+    # Set the probability of raising an error
+    error_probability = float(os.environ.get("FLAKY_ERROR_PROBABILITY", 0.1))
+
+    # Introduce randomness
+    if random.random() < error_probability:
+        # Raise a custom exception that should crash the application
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+    return {"message": "OK"}
