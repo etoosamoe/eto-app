@@ -2,3 +2,5 @@ uvicorn
 fastapi
 pydantic
 sqlalchemy
+python-dotenv
+sentry-sdk[fastapi]

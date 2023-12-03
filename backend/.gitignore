@@ -152,4 +152,4 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-database.db
+*.db
