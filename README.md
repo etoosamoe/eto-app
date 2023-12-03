@@ -42,6 +42,13 @@ python3 load.py
 
 ### Docker
 
+Fill in the .env file:
+
+```
+mv .env.example .env
+nano .env
+```
+
 Works as non-root user `worker`. You can build your own image:
 
 ```
@@ -116,6 +123,13 @@ docker run --env-file .env -p 3000:3000 etoosamoe/eto-frontend:latest
 # How to run entire app
 ## Docker Compose
 
+Fill in the .env file:
+
+```
+mv .env.example .env
+nano .env
+```
+
 ```
 docker compose pull
 docker compose up -d --no-build
@@ -127,12 +141,16 @@ WIP
 
 # Monitoring
 
+## Healthcheck
 Backend has `/healthcheck` endpoint which returns status-code `200`.
 
-Prometheus-like metrics endpoint:
+## Sentry
+You can add Sentry DSN as `SENTRY_DSN` env. variable, e.g. `SENTRY_DSN="https://<dsn>.ingest.sentry.io/<id>"`.
 
+## Metrics
+Prometheus-like metrics endpoint:
 WIP
 
 # Endpoints
 
-`/flaky` — this API enpoint will raise an 500 error sometimes. Default probability is 0.1 which means 10% of all requests. It can be modified by `FLAKY_ERROR_PROBABILITY` env. variable.
+`/flaky` — this API enpoint will raise an 500 error sometimes. Default probability is 0.1 which means 10% of all requests. It can be modified by `FLAKY_ERROR_PROBABILITY` env. variable. e.g. if probability=1 every request to /flaky endpoint will raise an error.
