@@ -40,6 +40,10 @@ To load some predifined data from `dataset.csv` use:
 python3 load.py
 ```
 
+#### Backend Version
+
+To set backend version which will appear at the very bottom of the frontend page, you should set `BACKEND_VERSION` environment variable, e.g. `BACKEND_VERSION=1.1.2`. This value will be in the response on `/version` API endpoint.
+
 ### Docker
 
 Fill in the .env file:
@@ -104,6 +108,10 @@ npm run build
 ```
 Files will be in the `build` directory.
 
+#### Frontend Version
+
+To set frontend version which will appear at the very bottom of the page, you should set `REACT_APP_FRONT_VERSION` environment variable, e.g. `REACT_APP_FRONT_VERSION=1.1.1`.
+
 ### Docker
 
 This is a multi-stage build, and final image contains only Nginx web-server, static files from build image, and Nginx configuration file (`frontend/nginx.conf`). Nginx also proxy-passes all requests to `/servers`, `/version`, `/docs` locations to backend instance. (See `frontend/Dockerfile`)
@@ -123,12 +131,14 @@ docker run --env-file .env -p 3000:3000 etoosamoe/eto-frontend:latest
 # How to run entire app
 ## Docker Compose
 
-Fill in the .env file:
+Fill in the .env file in `frontend` directory:
 
 ```
 mv .env.example .env
 nano .env
 ```
+
+The run these commands from the root directory:
 
 ```
 docker compose pull
