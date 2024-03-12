@@ -55,6 +55,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: etoosamoe/eto-frontend
+
+      - name: Create .env file
+        run: mv frontend/.env.example frontend/.env
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
