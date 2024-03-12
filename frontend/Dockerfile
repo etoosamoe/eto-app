@@ -1,5 +1,5 @@
 
-FROM node:20 as build
+FROM --platform=linux/amd64 node:20 as build
 
 WORKDIR /usr/src/app
 
