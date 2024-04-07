@@ -1,0 +1,3 @@
+POSTGRES_PASSWORD=password
+POSTGRES_USER=etoapp
+POSTGRES_DB=etoapp

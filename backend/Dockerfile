@@ -1,5 +1,10 @@
 FROM --platform=linux/amd64 python:3.11.5-alpine3.18
 
+# curl for healthcheck
+RUN apk add --update \
+    curl \
+    && rm -rf /var/cache/apk/*
+
 RUN adduser -D worker
 USER worker
 WORKDIR /home/worker
