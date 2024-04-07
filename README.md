@@ -46,9 +46,10 @@ To set backend version which will appear at the very bottom of the frontend page
 
 ### Docker
 
-Fill in the .env file:
+Fill in the .env file in `backend` directory:
 
 ```
+cd backend
 mv .env.example .env
 nano .env
 ```
@@ -75,7 +76,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --header 'accept: application/json' \
   --data '{
-  "hostname": "ci00.ah",
+  "hostname": "ci00",
   "type": "hw",
   "cores": 32,
   "ram": 64,
@@ -92,6 +93,8 @@ Frontend works with NodeJS and uses React. It makes requests to backend API to g
 
 ### Local
 
+You need to define `REACT_APP_BACKEND_URL` variable during the build or start stage, due to add correct links to backend service on a service html page.
+
 ```
 cd frontend
 npm install
@@ -103,7 +106,7 @@ To build static files:
 
 ```
 cd frontend
-npm install
+npm ci
 npm run build
 ```
 Files will be in the `build` directory.
@@ -115,6 +118,15 @@ To set frontend version which will appear at the very bottom of the page, you sh
 ### Docker
 
 This is a multi-stage build, and final image contains only Nginx web-server, static files from build image, and Nginx configuration file (`frontend/nginx.conf`). Nginx also proxy-passes all requests to `/servers`, `/version`, `/docs` locations to backend instance. (See `frontend/Dockerfile`)
+
+Fill in the .env file in `frontend` directory:
+
+```
+cd frontend
+mv .env.example .env
+nano .env
+```
+Then run build container image:
 
 ```
 cd frontend
@@ -131,17 +143,22 @@ docker run --env-file .env -p 3000:3000 etoosamoe/eto-frontend:latest
 # How to run entire app
 ## Docker Compose
 
-Fill in the .env file in `frontend` directory:
+Fill in the .env file in `frontend` and `backend` directories:
 
 ```
 mv .env.example .env
 nano .env
 ```
 
+> [!TIP]
+> If you use ARM arch (e.g. mac m1 cpu), you should uncomment arch directive in `docker-compose.yml` file.
+
 The run these commands from the root directory:
 
 ```
 docker compose pull
+docker compose up -d
+or
 docker compose up -d --no-build
 ```
 
