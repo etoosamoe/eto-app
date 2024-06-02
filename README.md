@@ -164,6 +164,32 @@ or
 docker compose up -d --no-build
 ```
 
+## Kubernetes
+
+Manifests in `k8s` directory includes:
+- `db.yml` as Postgres deployment, with configmap
+- `backend.yml` and `frontend.yml` to deploy application
+- namespace creation
+
+If you already have a database just fill in db and host to configmap (1 step), and fill in the user and password to `secrets.yml`. Then go straight to 4 step.
+
+1. Fill in the configmap parameters in `k8s/db.yml` with database name and database host.
+2. Add base64-encoded values of `postgres-user` and `postgres-password` to `secrets.yml`.
+3. Deploy the database:
+```
+cd k8s
+kubectl apply -f namespace.yml
+kubectl apply -f db.yml
+```
+4. Deploy the application:
+```
+# If you need a database uncomment the line below
+# kubectl apply -f db.yml
+kubectl apply -f namespace.yml
+kubectl apply -f backend.yml
+kubectl apply -f frontend.yml
+```
+
 ## Helm
 
 WIP
