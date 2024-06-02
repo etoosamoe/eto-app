@@ -3,7 +3,7 @@ import Axios from 'axios';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
-const backendServerUrl = process.env.REACT_APP_BACKEND_URL;
+const backendServerUrl = window._env_.REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
 const frontendVersion = process.env.REACT_APP_FRONT_VERSION;
 if (!backendServerUrl) {
   console.error('REACT_APP_BACKEND_URL environment variable is not set.');
