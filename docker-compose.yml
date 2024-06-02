@@ -27,7 +27,6 @@ services:
       context: frontend/.
       args:
         REACT_APP_FRONT_VERSION: "1.0.0"
-        REACT_APP_BACKEND_URL: "http://127.0.0.1:8000"
     image: etoosamoe/eto-frontend:latest
     # enable `platform: linux/arm64/v8` if you use ARM
     #platform: linux/arm64/v8
