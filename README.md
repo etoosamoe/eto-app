@@ -93,7 +93,7 @@ Frontend works with NodeJS and uses React. It makes requests to backend API to g
 
 ### Local
 
-You need to define `REACT_APP_BACKEND_URL` variable during the build or start stage, due to add correct links to backend service on a service html page.
+By default `REACT_APP_BACKEND_URL` points to `http://localhost:8000`, it is OK for local development and runs. You should change it to whatever-else backend container URL during the runtime.
 
 ```
 cd frontend
