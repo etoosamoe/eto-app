@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   backend:
     build: backend/.
@@ -16,7 +14,7 @@ services:
     ports:
       - "8000:8000"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/healthcheck"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/api/healthcheck"]
       interval: 5s
       timeout: 10s
       retries: 3
@@ -25,8 +23,6 @@ services:
   frontend:
     build: 
       context: frontend/.
-      args:
-        REACT_APP_FRONT_VERSION: "1.0.0"
     image: etoosamoe/eto-frontend:latest
     # enable `platform: linux/arm64/v8` if you use ARM
     #platform: linux/arm64/v8

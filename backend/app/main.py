@@ -51,12 +51,12 @@ async def root():
 def main():
     return RedirectResponse(url="/docs/")
 
-@app.get("/servers", response_model=List[schemas.Server])
+@app.get("/api/servers", response_model=List[schemas.Server])
 def list_servers(db: Session = Depends(get_db)):
     servers = db.query(models.Server).all()
     return servers
 
-@app.post("/servers", status_code=status.HTTP_201_CREATED, response_model=schemas.Server)
+@app.post("/api/servers", status_code=status.HTTP_201_CREATED, response_model=schemas.Server)
 def create_server(server: schemas.ServerCreate, db: Session = Depends(get_db)):
     new_server = models.Server(
         hostname = server.hostname,
@@ -73,14 +73,14 @@ def create_server(server: schemas.ServerCreate, db: Session = Depends(get_db)):
     db.refresh(new_server)
     return new_server
 
-@app.get("/servers/{id}", response_model=schemas.Server)
+@app.get("/api/servers/{id}", response_model=schemas.Server)
 def read_server(id: int, db: Session = Depends(get_db)):
     server = db.query(models.Server).get(id)
     if not server:
         raise HTTPException(status_code=404, detail=f"server with id {id} not found")
     return server
 
-@app.put("/servers/{id}", response_model=schemas.Server)
+@app.put("/api/servers/{id}", response_model=schemas.Server)
 def update_server(id: int, upd_server: schemas.Server, db: Session = Depends(get_db)):
     server = db.query(models.Server).get(id)
     if server:
@@ -95,7 +95,7 @@ def update_server(id: int, upd_server: schemas.Server, db: Session = Depends(get
         raise HTTPException(status_code=404, detail=f"server with id {id} not found")
     return upd_server
 
-@app.delete("/servers/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/api/servers/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_server(id: int, db: Session = Depends(get_db)):
     server = db.query(models.Server).get(id)
     if server:
@@ -106,15 +106,15 @@ def delete_server(id: int, db: Session = Depends(get_db)):
 
     return f"None"
 
-@app.get('/healthcheck', status_code=status.HTTP_200_OK)
+@app.get('/api/healthcheck', status_code=status.HTTP_200_OK)
 def perform_healthcheck():
     return {'healthcheck': 'Everything OK!'}
 
-@app.get('/version', status_code=status.HTTP_200_OK)
+@app.get('/api/version', status_code=status.HTTP_200_OK)
 def get_version():
     return {'version': os.getenv("BACKEND_VERSION")}
 
-@app.get("/flaky", description="Flaky endpoint will generate an error sometimes. Configure via FLAKY_ERROR_PROBABILITY variable.")
+@app.get("/api/flaky", description="Flaky endpoint will generate an error sometimes. Configure via FLAKY_ERROR_PROBABILITY variable.")
 def flaky_endpoint():
     # Set the probability of raising an error
     error_probability = float(os.environ.get("FLAKY_ERROR_PROBABILITY", 0.1))

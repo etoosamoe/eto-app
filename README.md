@@ -15,7 +15,7 @@ By default works with SQLite file-based database stored in the container — all
 
 You can set your own database connection in `backend/.env` file or with a `DB_CONN` variable (See `docker-compose.yml`).
 
-You can find swagger at `/docs`. API enpoint is `/servers`
+You can find swagger at `/api/docs`. Main API enpoint is `/api/servers`
 
 ## How to run backend
 
@@ -42,7 +42,7 @@ python3 load.py
 
 #### Backend Version
 
-To set backend version which will appear at the very bottom of the frontend page, you should set `BACKEND_VERSION` environment variable, e.g. `BACKEND_VERSION=1.1.2`. This value will be in the response on `/version` API endpoint.
+To set backend version which will appear at the very bottom of the frontend page, you should set `BACKEND_VERSION` environment variable, e.g. `BACKEND_VERSION=1.1.2`. This value will be in the response on `/api/version` API endpoint.
 
 ### Docker
 
@@ -72,7 +72,7 @@ docker run --env-file .env -p 8000:8000 etoosamoe/eto-backend:latest
 
 ```
 curl --request POST \
-  --url http://127.0.0.1:8000/servers \
+  --url http://127.0.0.1:8000/api/servers \
   --header 'Content-Type: application/json' \
   --header 'accept: application/json' \
   --data '{
@@ -93,7 +93,9 @@ Frontend works with NodeJS and uses React. It makes requests to backend API to g
 
 ### Local
 
-By default `REACT_APP_BACKEND_URL` points to `http://localhost:8000`, it is OK for local development and runs. You should change it to whatever-else backend container URL during the runtime.
+By default `REACT_APP_BACKEND_URL` is empty, which means frontend will use relative URLs.
+
+If you want to run frontend without container (which includes Nginx and will redirect `/api` requests to backend), you must set `REACT_APP_BACKEND_URL` env variable, e.g.:
 
 ```
 cd frontend
@@ -117,7 +119,7 @@ To set frontend version which will appear at the very bottom of the page, you sh
 
 ### Docker
 
-This is a multi-stage build, and final image contains only Nginx web-server, static files from build image, and Nginx configuration file (`frontend/nginx.conf`). Nginx also proxy-passes all requests to `/servers`, `/version`, `/docs` locations to backend instance. (See `frontend/Dockerfile`)
+This is a multi-stage build, and final image contains only Nginx web-server, static files from build image, and Nginx configuration file (`frontend/nginx.conf`). Nginx also proxy-passes all requests to `/api/servers`, `/api/version`, `/api/docs` locations to backend instance. (See `frontend/Dockerfile`)
 
 Fill in the .env file in `frontend` directory:
 

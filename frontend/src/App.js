@@ -3,15 +3,8 @@ import Axios from 'axios';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
-const backendServerUrl = window._env_.REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
-const frontendVersion = process.env.REACT_APP_FRONT_VERSION;
-if (!backendServerUrl) {
-  console.error('REACT_APP_BACKEND_URL environment variable is not set.');
-  process.exit(1);
-}
-
-// Now you can use backendServerUrl in your code
-console.log(`Backend Server URL: ${backendServerUrl}`);
+const backendServerUrl = window._env_?.REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL || '';
+const frontendVersion = window._env_?.REACT_APP_FRONT_VERSION || process.env.REACT_APP_FRONT_VERSION || 'undefined';
 
 function Table({ frontVersion }) {
   const [data, setData] = useState([]);
@@ -26,14 +19,14 @@ function Table({ frontVersion }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getBackendVersion = () => {
-    Axios.get(`${backendServerUrl}/version`)
+    Axios.get(`${backendServerUrl}/api/version`)
       .then((response) => {
         setBackendVersion(response.data.version);
       })
   };
 
   const fetchServersData = () => {
-    Axios.get(`${backendServerUrl}/servers`)
+    Axios.get(`${backendServerUrl}/api/servers`)
       .then((response) => {
         setData(response.data);
       })
@@ -72,7 +65,7 @@ function Table({ frontVersion }) {
       disk,
     };
 
-    Axios.post(`${backendServerUrl}/servers`, newServer)
+    Axios.post(`${backendServerUrl}/api/servers`, newServer)
       .then((response) => {
         fetchServersData()
         setWarning('');
@@ -108,7 +101,7 @@ function Table({ frontVersion }) {
     };
 
     // Send a POST request to add the new server
-    Axios.delete(`${backendServerUrl}/servers/${id}`, DeleteServer)
+    Axios.delete(`${backendServerUrl}/api/servers/${id}`, DeleteServer)
       .then((response) => {
         fetchServersData();
         setWarning('');
@@ -145,7 +138,7 @@ function Table({ frontVersion }) {
       disk,
     };
 
-    Axios.put(`${backendServerUrl}/servers/${id}`, updServer)
+    Axios.put(`${backendServerUrl}/api/servers/${id}`, updServer)
       .then((response) => {
         fetchServersData();
         setWarning('');
@@ -174,7 +167,7 @@ function Table({ frontVersion }) {
 
   const handleGetSingleData  = (serverId) => {
 
-    Axios.get(`${backendServerUrl}/servers/${serverId}`)
+    Axios.get(`${backendServerUrl}/api/servers/${serverId}`)
       .then((response) => {
         setId(response.data.id)
         setHostname(response.data.hostname)
