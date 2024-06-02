@@ -2,9 +2,9 @@
 FROM --platform=linux/amd64 node:20.12.1-bookworm as build
 
 ENV NODE_ENV=production
-# Define build-time variables
-ARG REACT_APP_FRONT_VERSION
+
 ENV REACT_APP_FRONT_VERSION=$REACT_APP_FRONT_VERSION
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
 
 WORKDIR /usr/src/app
 
